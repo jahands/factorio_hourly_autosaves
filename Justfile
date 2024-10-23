@@ -1,4 +1,5 @@
 set shell := ["zsh", "-c"]
+set dotenv-load := true
 
 [private]
 @help:
