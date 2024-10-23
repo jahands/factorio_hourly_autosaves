@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "name": "hourly_autosaves_2",
   "homepage": "https://github.com/jahands/factorio_hourly_autosaves",
-  "author": "Shados",
+  "author": "Geostyx",
   "description": "Autosaves the game (using a configurable prefix) on every hour of game-time",
   "factorio_version": "2.0",
   "dependencies": ["base >= 2.0.8"]
