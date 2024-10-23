@@ -13,8 +13,8 @@ main = function()
   GUI.setup()
 end
 mod_init = function()
-  if global.autosave_interval == nil then
-    global.autosave_interval = settings.global["hourly_autosaves_interval"].value
+  if storage.autosave_interval == nil then
+    storage.autosave_interval = settings.global["hourly_autosaves_interval"].value
   end
 end
 hourly_autosave = function(nth_tick_event)
@@ -44,7 +44,7 @@ update_save_interval = function(on_runtime_mod_setting_changed_event)
     return 
   end
   local new_interval = settings.global["hourly_autosaves_interval"].value
-  local old_interval = global.autosave_interval
+  local old_interval = storage.autosave_interval
   debug_print({
     "debug.update_save_interval",
     old_interval,
@@ -52,7 +52,7 @@ update_save_interval = function(on_runtime_mod_setting_changed_event)
   })
   script.on_nth_tick(old_interval * TICKS_PER_MINUTE, nil)
   script.on_nth_tick(new_interval * TICKS_PER_MINUTE, hourly_autosave)
-  global.autosave_interval = new_interval
+  storage.autosave_interval = new_interval
 end
 save_hotkey = function(tagged_save_hotkey_event)
   local player_index, tick
