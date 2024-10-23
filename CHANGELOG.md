@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0 (2024-10-23)
+
+### Other
+
+- Ported mod to Factorio 2.0
+
 ## 1.0.1 (2021-02-23)
 
 ### Other
