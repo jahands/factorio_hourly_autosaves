@@ -187,7 +187,8 @@ permissions_error_gui = function(player, action)
   })
   local pusher = button_flow.add({
     type = "empty-widget",
-    style = "draggable_space_with_no_right_margin"
+    style = "draggable_space",
+    right_margin = 0
   })
   pusher.style.horizontally_stretchable = true
   pusher.style.height = 32
@@ -214,7 +215,8 @@ message_gui = function(player, message)
   button_flow.style.vertical_align = "center"
   local pusher = button_flow.add({
     type = "empty-widget",
-    style = "draggable_space_with_no_left_margin"
+    style = "draggable_space",
+    left_margin = 0
   })
   pusher.style.horizontally_stretchable = true
   pusher.style.height = 32
