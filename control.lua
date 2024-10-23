@@ -20,7 +20,7 @@ end
 hourly_autosave = function(nth_tick_event)
   local tick = nth_tick_event.tick
   if tick == 0 then
-    return 
+    return
   end
   timestamped_save(tick)
 end
@@ -41,7 +41,7 @@ timestamped_save = function(tick, suffix)
 end
 update_save_interval = function(on_runtime_mod_setting_changed_event)
   if on_runtime_mod_setting_changed_event.setting ~= "hourly_autosaves_interval" then
-    return 
+    return
   end
   local new_interval = settings.global["hourly_autosaves_interval"].value
   local old_interval = storage.autosave_interval
@@ -62,9 +62,10 @@ save_hotkey = function(tagged_save_hotkey_event)
 end
 save_shortcut = function(on_lua_shortcut_event)
   local player_index, prototype_name, tick
-  player_index, prototype_name, tick = on_lua_shortcut_event.player_index, on_lua_shortcut_event.prototype_name, on_lua_shortcut_event.tick
+  player_index, prototype_name, tick = on_lua_shortcut_event.player_index, on_lua_shortcut_event.prototype_name,
+      on_lua_shortcut_event.tick
   if not (prototype_name == "tagged_save") then
-    return 
+    return
   end
   local player = game.players[player_index]
   return manual_save(player, tick)
@@ -83,7 +84,7 @@ prefix_reminder = function(on_player_joined_game_event)
   player_index = on_player_joined_game_event.player_index
   local player = game.players[player_index]
   if not (player.admin and settings.global["hourly_autosaves_prefix"].value == "") then
-    return 
+    return
   end
   message_gui(player, {
     "ha-gui.set_autosaves_prefix",
@@ -229,14 +230,14 @@ message_gui = function(player, message)
 end
 close_gui_button_handler = function(event, gui_frame)
   if not (event.name == defines.events.on_gui_click) then
-    return 
+    return
   end
   GUI.deregister_handlers(gui_frame)
   return gui_frame.destroy()
 end
 tagged_save_gui_handler = function(event, event_filter, gui_frame, save_name_field)
   if not (event.name == event_filter) then
-    return 
+    return
   end
   timestamped_save(event.tick, save_name_field.text)
   GUI.deregister_handlers(gui_frame)
