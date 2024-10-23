@@ -5,13 +5,17 @@ set dotenv-load := true
 @help:
   just --list
 
+@clean:
+  rm -rf dist
+  mkdir -p dist
+
 build:
-  @mkdir -p dist
+  just clean
   pnpm fmtk package --outdir dist
 
 upload:
   pnpm fmtk upload ./dist/*.zip
 
 publish:
-  @mkdir -p dist
+  just clean
   pnpm fmtk publish
