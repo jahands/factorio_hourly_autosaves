@@ -1,0 +1,24 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      factoriomod-debug:
+        specifier: ^2.0.2
+        version: 2.0.2
+
+packages:
+
+  factoriomod-debug@2.0.2:
+    resolution: {integrity: sha512-wiLPQczxC19bBDBIy5E2bUOt2hl3nxIMUdH9qIDl8sEsuSQ/CIB9FZhVBoK/3N9GQlCuVTWNiaGp/rML46TSEg==}
+    engines: {node: '>20', vscode: ^1.94.0}
+    hasBin: true
+
+snapshots:
+
+  factoriomod-debug@2.0.2: {}
