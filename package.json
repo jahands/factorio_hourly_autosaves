@@ -1,0 +1,9 @@
+{
+  "name": "factorio_hourly_autosaves",
+  "version": "2.0.0",
+  "description": "Autosaves the game (using a configurable prefix) on every hour of game-time",
+  "license": "GPL 3.0",
+  "devDependencies": {
+    "factoriomod-debug": "2.0.2"
+  }
+}
