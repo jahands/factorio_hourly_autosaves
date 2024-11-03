@@ -13,6 +13,10 @@ build:
   just clean
   pnpm fmtk package --outdir dist
 
+dev:
+  just build
+  cp dist/*.zip ~/Library/Application\ Support/factorio/mods
+
 upload:
   pnpm fmtk upload ./dist/*.zip
 
