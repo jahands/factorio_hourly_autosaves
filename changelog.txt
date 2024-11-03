@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
-Date: ????
+Date: 2024-11-03
   Changes:
+    - Fixed bug where multiple manual save GUIs could be opened at once.
+    - Fixed bug where manual save GUI would not go away if the game saved while it was open.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024-10-23

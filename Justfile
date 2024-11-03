@@ -15,7 +15,7 @@ build:
 
 dev:
   just build
-  cp dist/*.zip ~/Library/Application\ Support/factorio/mods
+  cp -f dist/*.zip ~/Library/Application\ Support/factorio/mods
 
 upload:
   pnpm fmtk upload ./dist/*.zip

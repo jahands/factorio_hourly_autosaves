@@ -10,6 +10,8 @@ main = function()
   script.on_event(defines.events.on_runtime_mod_setting_changed, update_save_interval)
   script.on_event(defines.events.on_lua_shortcut, save_shortcut)
   script.on_event("tagged_save_hotkey", save_hotkey)
+  script.on_event(defines.events.on_player_joined_game, destroy_player_frames_handler)
+  script.on_event(defines.events.on_player_left_game, destroy_player_frames_handler)
   script.on_event(defines.events.on_player_joined_game, prefix_reminder)
   GUI.setup()
 end
@@ -18,6 +20,47 @@ mod_init = function()
   if storage.autosave_interval == nil then
     storage.autosave_interval = settings.global["hourly_autosaves_interval"].value
   end
+
+  -- Always reset the GUI state when loading because GUI
+  -- event handlers are not persisted
+  for _, player in pairs(game.connected_players) do
+    destroy_player_frames(player)
+  end
+end
+
+
+---Save frame to storage so we can destroy it later
+---@param player LuaPlayer
+---@param frame LuaGuiElement
+function track_frame(player, frame)
+  if storage.gui_frames[player.index] == nil then
+    storage.gui_frames[player.index] = {}
+  end
+  table.insert(storage.gui_frames[player.index], frame)
+end
+
+---@param player LuaPlayer
+function destroy_player_frames(player)
+  if storage.gui_frames[player.index] ~= nil then
+    ---@type LuaGuiElement[]
+    local frames = storage.gui_frames[player.index]
+
+    for _, frame in pairs(frames) do
+      frame.destroy()
+    end
+
+    storage.gui_frames[player.index] = nil
+  end
+
+  if storage.save_gui_open[player.index] ~= nil then
+    storage.save_gui_open[player.index] = nil
+  end
+end
+
+function destroy_player_frames_handler(event)
+  local player_index = event.player_index
+  local player = game.players[player_index]
+  destroy_player_frames(player)
 end
 
 hourly_autosave = function(nth_tick_event)
@@ -78,6 +121,7 @@ save_shortcut = function(on_lua_shortcut_event)
   return manual_save(player, tick)
 end
 
+---@param player LuaPlayer
 manual_save = function(player, tick)
   if player.admin then
     save_gui(player, tick)
@@ -103,7 +147,11 @@ prefix_reminder = function(on_player_joined_game_event)
   })
 end
 
+---@param player LuaPlayer
 save_gui = function(player, tick)
+  if storage.save_gui_open[player.index] then
+    return
+  end
   local frame = player.gui.screen.add({
     type = "frame",
     direction = "vertical",
@@ -111,6 +159,8 @@ save_gui = function(player, tick)
       "ha-gui.save_dialog"
     }
   })
+  track_frame(player, frame)
+  storage.save_gui_open[player.index] = true
   frame.auto_center = true
   local text_frame = frame.add({
     type = "frame",
@@ -166,6 +216,7 @@ save_gui = function(player, tick)
   GUI.register_handler(name_field, tagged_save_gui_handler, defines.events.on_gui_confirmed, frame, name_field)
 end
 
+---@param player LuaPlayer
 permissions_error_gui = function(player, action)
   local frame = player.gui.screen.add({
     type = "frame",
@@ -174,6 +225,7 @@ permissions_error_gui = function(player, action)
       "ha-gui.permissions_error_dialog"
     }
   })
+  track_frame(player, frame)
   frame.auto_center = true
   frame.add({
     type = "label",
@@ -207,6 +259,7 @@ permissions_error_gui = function(player, action)
   GUI.register_handler(back_button, close_gui_button_handler, frame)
 end
 
+---@param player LuaPlayer
 message_gui = function(player, message)
   local frame = player.gui.screen.add({
     type = "frame",
@@ -215,6 +268,7 @@ message_gui = function(player, message)
       "ha-gui.message_dialog"
     }
   })
+  track_frame(player, frame)
   frame.auto_center = true
   frame.add({
     type = "label",
@@ -248,6 +302,9 @@ close_gui_button_handler = function(event, gui_frame)
     return
   end
   GUI.deregister_handlers(gui_frame)
+
+  -- Bit of a hack because there are multiple GUIs, but good enough I guess?
+  storage.save_gui_open[event.player_index] = nil
   return gui_frame.destroy()
 end
 
@@ -257,6 +314,7 @@ tagged_save_gui_handler = function(event, event_filter, gui_frame, save_name_fie
   end
   timestamped_save(event.tick, save_name_field.text)
   GUI.deregister_handlers(gui_frame)
+  storage.save_gui_open[event.player_index] = nil
   return gui_frame.destroy()
 end
 

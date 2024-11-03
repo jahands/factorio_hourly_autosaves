@@ -1,11 +1,11 @@
 local GUI, gui_handlers
-gui_handlers = { }
+gui_handlers = {}
 GUI = {
 
   register_handler = function(element, handler, ...)
     local player_gui_handlers = gui_handlers[element.player_index]
     if not (player_gui_handlers) then
-      player_gui_handlers = { }
+      player_gui_handlers = {}
       gui_handlers[element.player_index] = player_gui_handlers
     end
     local params = {
@@ -20,7 +20,7 @@ GUI = {
   deregister_handlers = function(element)
     local player_gui_handlers = gui_handlers[element.player_index]
     if not (player_gui_handlers) then
-      return 
+      return
     end
     player_gui_handlers[element.index] = nil
     for _, child_element in pairs(element.children) do
@@ -32,11 +32,11 @@ GUI = {
     local element
     element = event.element
     if not ((element and element.valid)) then
-      return 
+      return
     end
     local player_gui_handlers = gui_handlers[element.player_index]
     if not (player_gui_handlers) then
-      return 
+      return
     end
     local registration = player_gui_handlers[element.index]
     if registration then
