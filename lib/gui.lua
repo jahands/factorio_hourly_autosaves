@@ -1,6 +1,7 @@
 local GUI, gui_handlers
 gui_handlers = { }
 GUI = {
+
   register_handler = function(element, handler, ...)
     local player_gui_handlers = gui_handlers[element.player_index]
     if not (player_gui_handlers) then
@@ -15,6 +16,7 @@ GUI = {
       params
     }
   end,
+
   deregister_handlers = function(element)
     local player_gui_handlers = gui_handlers[element.player_index]
     if not (player_gui_handlers) then
@@ -25,6 +27,7 @@ GUI = {
       GUI.deregister_handlers(child_element)
     end
   end,
+
   on_gui_event = function(event)
     local element
     element = event.element
@@ -42,6 +45,7 @@ GUI = {
       return handler(event, table.unpack(params))
     end
   end,
+
   setup = function()
     script.on_event(defines.events.on_gui_checked_state_changed, GUI.on_gui_event)
     script.on_event(defines.events.on_gui_click, GUI.on_gui_event)
